@@ -37,9 +37,6 @@ RUN apt-cache madison docker-ce
 RUN apt-get install docker-ce=${DOCKER_ENGINE:-18.06.2}~ce~3-0~debian -y
 RUN docker -v
 
-RUN usermod -aG docker jenkins && \
-    usermod -aG users jenkins
-
 # Install Docker Compose
 RUN apt-get install python-dev python-setuptools gcc make libssl-dev -y
 RUN easy_install pip
@@ -48,12 +45,22 @@ RUN pip install ansible boto boto3
 
 RUN docker-compose -v
 
+
+#RUN usermod -a -G docker jenkins && \
+#    usermod -a -G users jenkins
+
+RUN groupdel docker && \
+    groupadd -g 994 dockerami && \
+    usermod -aG dockerami jenkins
+
 # Change to jenkins user
 USER jenkins
 
 
 COPY executors.groovy /home/test/jenkins_home/executors.groovy
 # Add Jenkins plugins
-
-COPY plugins.txt /usr/share/jenkins/plugins.txt
-RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/plugins.txt
+#
+#COPY plugins.txt /usr/share/jenkins/plugins.txt
+#RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/plugins.txt
+#
+#

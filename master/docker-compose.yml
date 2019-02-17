@@ -7,7 +7,7 @@ volumes:
 services:
   jenkins:
     build:
-      context: .
+      context: ..
       args:
         DOCKER_ENGINE: ${DOCKER_ENGINE}
         DOCKER_COMPOSE: ${DOCKER_COMPOSE}
